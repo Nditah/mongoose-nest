@@ -51,10 +51,9 @@ export class AuthService {
   }
 
   async validateUser(jwtPayload: JwtPayload): Promise<any> {
-    const user = await this.userModel.findOne({ _id: jwtPayload.userId, verified: true });
-    if (!user) {
-      throw new UnauthorizedException('User not found.');
-    }
+    const user = await this.userModel.findOne({ _id: jwtPayload.userId });
+    if (!user) throw new UnauthorizedException('User not found.');
+    if (!user.verified) throw new UnauthorizedException('User not verified.');
     return user;
   }
 
